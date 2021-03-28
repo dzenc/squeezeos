@@ -1211,6 +1211,7 @@ fixes/warning-fix-in-fsl-rngc.patch
 fixes/fix-locking-fsl-rngc.patch
 fixes/move-sdma-to-real-mutex-api.patch
 fixes/fix-compile-error-when-irqsoff-tracing-enabled.patch
+fixes/print-wireless-event-size-command.patch
 
 # ----------------------------------------------------------------------------
 # Some additonal patches to make the RT-kernel behave better or easier to
