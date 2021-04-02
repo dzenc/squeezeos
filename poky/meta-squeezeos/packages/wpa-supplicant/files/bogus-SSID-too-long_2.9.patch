@@ -1,0 +1,59 @@
+From f01d01d56a57537d468ba6ff45e481ba3fcffc92 Mon Sep 17 00:00:00 2001
+From: Martin Williams <martinr.williams@gmail.com>
+Date: Tue, 30 Mar 2021 16:04:18 +0100
+Subject: [PATCH] driver_wext.c: For Squeezebox Radio - Restrict length of
+ bogus SSID
+
+This patch has been prepared in the context of the Squeezebox Radio
+which uses an Atheros AR6002 wi-fi module.
+
+The Radio is observed to generate "Wireless Event too big (33)"
+kernel messages when wpa_supplicant commands the wi-fi radio to
+disconnect from its AP.
+
+The command that generates the error is SIOCSIWESSID (cmd=0x8B1A).
+
+Investigation shows that these are triggered by wpa_supplicant's WEXT
+driver which sets a randomized bogus SSID following each disconnection,
+with the SSID having length 32 (the maximum length of an SSID). It does
+this by way of an SIOCSIWESSID ioctl call.
+
+It appears that the AR6000/AR6002 driver/firmware will always have
+difficulty with SSIDs of length 32. We do not have the source code
+available, but the driver does appear to anticipate that the provided
+SSID will have been been, perhaps, NULL terminated, yet still only
+occupy 32 bytes.
+
+This change mitigates the issue by restricting the length of the
+randomized bogus SSID to 31. It is of no real consequence, I think, but,
+with a growing number of recent reports of wi-fi difficulties with the
+Radio, these irrelevant error messages can only distract attention from
+determining the root cause of the difficulties.
+---
+ src/drivers/driver_wext.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/drivers/driver_wext.c b/src/drivers/driver_wext.c
+index 4d4a05d0c..331368a64 100644
+--- ../src/drivers/driver_wext.c
++++ ../src/drivers/driver_wext.c
+@@ -1986,10 +1986,14 @@ static void wpa_driver_wext_disconnect(struct wpa_driver_wext_data *drv)
+ 		 * to associate with something even if it does not understand
+ 		 * SIOCSIWMLME commands (or tries to associate automatically
+ 		 * after deauth/disassoc).
++		 * Note: Patched to restrict length of SSID to SSID_MAX_LEN - 1
++		 * (31) to cater for AR6000/AR6002 driver/firmware in use on
++		 * the Squeezebox Radio. This driver/firmware does not appear
++		 * to respond well to SSIDs with length SSID_MAX_LEN (32).
+ 		 */
+-		for (i = 0; i < SSID_MAX_LEN; i++)
++		for (i = 0; i < (SSID_MAX_LEN - 1); i++)
+ 			ssid[i] = rand() & 0xFF;
+-		if (wpa_driver_wext_set_ssid(drv, ssid, SSID_MAX_LEN) < 0) {
++		if (wpa_driver_wext_set_ssid(drv, ssid, SSID_MAX_LEN - 1) < 0) {
+ 			wpa_printf(MSG_DEBUG, "WEXT: Failed to set bogus "
+ 				   "SSID to disconnect");
+ 		}
+-- 
+2.30.1
+
