@@ -5,6 +5,7 @@ LICENSE = "GNU GPL"
 PR = "r0"
 
 SRC_URI = "http://w1.fi/releases/wpa_supplicant-${PV}.tar.gz \
+	   file://bogus-SSID-too-long_2.9.patch;patch=1;pnum=0 \
 	   file://defconfig"
 
 SRC_URI_append_baby = " \
