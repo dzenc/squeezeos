@@ -1813,3 +1813,48 @@ AC_MSG_RESULT($ac_cv_rl_version)
 
 fi
 ])
+
+
+AC_DEFUN([BASH_FUNC_CTYPE_NONASCII],
+[
+AC_MSG_CHECKING(whether the ctype macros accept non-ascii characters)
+AC_CACHE_VAL(bash_cv_func_ctype_nonascii,
+[AC_TRY_RUN([
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
+#include <stdio.h>
+#include <ctype.h>
+
+main(c, v)
+int	c;
+char	*v[];
+{
+	char	*deflocale;
+	unsigned char x;
+	int	r1, r2;
+
+#ifdef HAVE_SETLOCALE
+	/* We take a shot here.  If that locale is not known, try the
+	   system default.  We try this one because '\342' (226) is
+	   known to be a printable character in that locale. */
+	deflocale = setlocale(LC_ALL, "en_US.ISO8859-1");
+	if (deflocale == 0)
+		deflocale = setlocale(LC_ALL, "");
+#endif
+
+	x = '\342';
+	r1 = isprint(x);
+	x -= 128;
+	r2 = isprint(x);
+	exit (r1 == 0 || r2 == 0);
+}
+], bash_cv_func_ctype_nonascii=yes, bash_cv_func_ctype_nonascii=no,
+   [AC_MSG_WARN(cannot check ctype macros if cross compiling -- defaulting to no)
+    bash_cv_func_ctype_nonascii=no]
+)])
+AC_MSG_RESULT($bash_cv_func_ctype_nonascii)
+if test $bash_cv_func_ctype_nonascii = yes; then
+AC_DEFINE(CTYPE_NON_ASCII)
+fi
+])
