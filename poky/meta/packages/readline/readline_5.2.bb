@@ -8,7 +8,7 @@ LICENSE = "GPLv2"
 DEPENDS += "ncurses"
 RPROVIDES_${PN} += "readline"
 LEAD_SONAME = "libreadline.so"
-PR = "r5"
+PR = "r6"
 
 SRC_URI = "ftp://ftp.gnu.org/gnu/readline/readline-${PV}.tar.gz \
            file://configure_fix.patch;patch=1 \
@@ -31,9 +31,6 @@ SRC_URI = "ftp://ftp.gnu.org/gnu/readline/readline-${PV}.tar.gz \
 S = "${WORKDIR}/readline-${PV}"
 
 inherit autotools_stage
-
-# Avoid autoconf 2.62+ cannot run test program while cross compiling mbstate_t configure error.
-export bash_cv_have_mbstate_t=yes
 
 do_configure () {
 	install -m 0644 ${WORKDIR}/acinclude.m4 ${S}/
