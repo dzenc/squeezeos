@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Disconnect the radio from its access point before taking the wireless
+# interface down.
+
+# When a wireless interface is taken down (e.g. during ifdown)
+# wpa_supplicant > v0.7.2 will place the wireless interface
+# into an 'INTERFACE_DISABLED' state. But it does not disconnect
+# the radio from the access point - the connection remains intact.
+
+# When the interface is next brought back up, wpa_supplicant
+# transitions into a 'DISCONNECTED' state, although the pre-existing
+# wireless connection remains active.
+
+# In this state, wpa_supplicant ignores a wpa_cli 'DISCONNECT' command,
+# so we can not disconnect from that pre-existing wireless connection.
+# It remain active.
+
+# This breaks Squeezeplay's network management logic, which relies upon
+# a fully working and timely wpa_cli 'DISCONNECT'. For example, when
+# switching to a new wireless network it is more than likely that the
+# DHCP client will obtain a configuration for the new network from the
+# old, still connected, network. This does't work well.
+
+if [ "$IFACE"x = eth1x ]; then
+	# Kick the DHCP client into releasing the existing lease
+	/bin/kill -usr2 `cat /var/run/udhcpc.$IFACE.pid`
+	# Give it some time ...
+	sleep 1
+	# ... before disconnecting from the AP.
+	/usr/sbin/wpa_cli disconnect
+fi
