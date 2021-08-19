@@ -1,0 +1,43 @@
+From 68d4523c916a84fed8ebbe7ff9504bd6d6274824 Mon Sep 17 00:00:00 2001
+From: Martin Williams <martinr.williams@gmail.com>
+Date: Sat, 14 Aug 2021 18:02:56 +0100
+Subject: [PATCH] Revert "wext: Increase scan timeout from 5 to 10 seconds"
+
+This change reverts commit 180cdf45a415969b851aab530e9b23606032941a.
+
+That change increased the scan timeout for the following reason:
+
+    Some dualband cards can use more than five seconds to run through
+    a full scan, so increase the timeout to avoid hitting the missing
+    scan completed event workaround.
+
+This has an adverse effect on Squeezeplay's UI, which anticipates that
+results will be available in about 5 seconds or so.
+
+The consequence is that the user will frequently not see any available
+wireless networks when he browses into the "Choose Network" menu, other
+than those that may exist in the wpa_supplicant.conf configuration file.
+
+Why a timeout should be necessary is unknown. It is possible that the
+Atheros driver in use in the 'baby' does not generate "scan completed"
+wireless events.
+---
+ src/drivers/driver_wext.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/drivers/driver_wext.c b/src/drivers/driver_wext.c
+index 4d4a05d0c..59e4e0f85 100644
+--- ../src/drivers/driver_wext.c
++++ ../src/drivers/driver_wext.c
+@@ -1117,7 +1117,7 @@ int wpa_driver_wext_scan(void *priv, struct wpa_driver_scan_params *params)
+ 
+ 	/* Not all drivers generate "scan completed" wireless event, so try to
+ 	 * read results after a timeout. */
+-	timeout = 10;
++	timeout = 5;
+ 	if (drv->scan_complete_events) {
+ 		/*
+ 		 * The driver seems to deliver SIOCGIWSCAN events to notify
+-- 
+2.30.1
+
