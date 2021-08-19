@@ -2,7 +2,7 @@ DESCRIPTION = "wpa-supplicant"
 SECTION = "base"
 LICENSE = "GNU GPL"
 
-PR = "r1"
+PR = "r2"
 
 SRC_URI = "http://w1.fi/releases/wpa_supplicant-${PV}.tar.gz \
 	   file://bogus-SSID-too-long_2.9.patch;patch=1;pnum=0 \
@@ -15,6 +15,8 @@ SRC_URI_append_baby = " \
 	"
 
 S = "${WORKDIR}/wpa_supplicant-${PV}/wpa_supplicant"
+
+CFLAGS_prepend = '-DCONFIG_WPA_CLI_HISTORY_DIR=\\"/tmp\\"'
 
 # With the csl2010q1 and high optimization it fails. 'arm' instruction set to be safe
 ARM_INSTRUCTION_SET = "arm"
