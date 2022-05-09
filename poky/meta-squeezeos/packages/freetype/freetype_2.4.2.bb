@@ -3,7 +3,7 @@ SECTION = "libs"
 LICENSE = "freetype"
 #PR = "r0"
 
-SRC_URI = "${SOURCEFORGE_MIRROR}/freetype/freetype-${PV}.tar.bz2"
+SRC_URI = "${SOURCEFORGE_MIRROR}/project/freetype/freetype2/${PV}/freetype-${PV}.tar.bz2"
 
 S = "${WORKDIR}/freetype-${PV}"
 
