@@ -6,7 +6,7 @@ DEPENDS = "libogg"
 
 PR = "r8"
 
-SRC_URI="${SOURCEFORGE_MIRROR}/flac/flac-${PV}.tar.gz \
+SRC_URI="${SOURCEFORGE_MIRROR}/project/flac/flac-src/flac-${PV}-src/flac-${PV}.tar.gz \
 	 file://bitreader-1.2.1.patch;patch=1 \
 	 file://compile-fix.patch;patch=1 \
          file://arm-asm.patch;patch=1"
