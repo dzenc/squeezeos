@@ -4,7 +4,7 @@ DEPENDS = "zlib gnutls"
 SECTION = "console/network"
 PR = "r1"
 
-SRC_URI = "http://curl.haxx.se/download/curl-${PV}.tar.bz2 \
+SRC_URI = "https://curl.se/download/archeology/curl-${PV}.tar.gz \
            file://pkgconfig_fix.patch;patch=1"
 
 inherit autotools_stage pkgconfig binconfig
