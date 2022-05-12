@@ -5,7 +5,7 @@ PR="r4"
 
 inherit autotools
 
-SRC_URI = "http://www.kernel.org/pub/software/scm/git/git-${PV}.tar.bz2 \
+SRC_URI = "https://git.kernel.org/pub/scm/git/git.git/snapshot/git-${PV}.tar.gz \
 	   file://autotools.patch;patch=1 \
 	  "
 
