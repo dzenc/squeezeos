@@ -1,7 +1,7 @@
-From a5dba96fcffb6e792ac7536d028a7655b1dbabab Mon Sep 17 00:00:00 2001
+From ab301ba261a8042a39cc6faa20f18b49eb745ce5 Mon Sep 17 00:00:00 2001
 From: Martin Williams <martinr.williams@gmail.com>
-Date: Wed, 29 Jan 2020 00:45:37 +0000
-Subject: [PATCH 2/3] Eliminate 'bass drop out' by disabling XRUN, and
+Date: Sun, 8 May 2022 12:05:04 +0100
+Subject: [PATCH 2/2] Eliminate 'bass drop out' by disabling XRUN, and
  substituting silence
 
 The 'bass drop out' effect is known to be triggered after recovering
@@ -16,9 +16,21 @@ However it is not certain that occurrence of these xruns would actually
 trigger drop out. I find, perhaps, 1 in 5, or 1 in 10.
 
 Eliminating the possibility of xruns appears to cure the matter, but
-will produce a small but noticeable glitch in the audio. So it becomes
-a matter of user preference: Are a few unnecessary glitches a price
-worth paying for eliminating 'bass drop out' ?
+may produce a small glitch in the audio. Experience suggests that this
+is not noticeable.
+
+However, this approach plays badly with streams having a sample rate of
+22050 Hz. After running such a stream for some hours, or simply pausing
+or stopping such a steam (the PCM device will be left at 22050 Hz), the
+audio output will become very scratchy/buzzy. This may be a result of
+quirks/defects present in ALSA's resampler. The Radio's hardware
+natively supports 44100 Hz and 48000 Hz streams, all others are passed
+through the resampler.
+
+I have only experienced 'bass drop out' with streams having a sample
+rate of 48000 Hz. So this patch restricts XRUN elimination to these
+streams, thereby avoiding the risk of inadvertently exposing other
+defects in the hardware/firmware.
 
 [1] For reasons unknown, we find that, after having apparently
 successfully recovered from xrun (by executing 'snd_pcm_recover'), the
@@ -30,14 +42,14 @@ Sending Tweeter sound to the Woofer, and vice versa, accounts for the
 observed 'bass drop out'. If listening through headphones, we hear that
 the left and right channels are swapped.
 ---
- .../src/audio/decode/decode_alsa_backend.c    | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ .../src/audio/decode/decode_alsa_backend.c    | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
 diff --git a/src/audio/decode/decode_alsa_backend.c b/src/audio/decode/decode_alsa_backend.c
-index 365fdf4bf..127efda4e 100644
+index 365fdf4bf..20b529e5b 100644
 --- a/src/audio/decode/decode_alsa_backend.c
 +++ b/src/audio/decode/decode_alsa_backend.c
-@@ -552,6 +552,71 @@ static int pcm_close(struct decode_alsa *state, snd_pcm_t **pcmp, int mode) {
+@@ -552,6 +552,81 @@ static int pcm_close(struct decode_alsa *state, snd_pcm_t **pcmp, int mode) {
  }
  
  
@@ -55,6 +67,16 @@ index 365fdf4bf..127efda4e 100644
 +
 +* A period of silence seems to sound marginally better than the
 +* alternative of playing out earlier audio.
++
++* This set up has been limited to streams with sample rate of 48000 Hz
++* because:
++* a) "Bass drop out" has only ever been observed at this sample rate,
++* b) The set up is known to play badly with streams with a sample rate
++*    of 22050 Hz. (Scratchy/buzzy playback after some hours.)
++* The Radio's native rates are 48000 Hz and 44100 Hz, so the 22050 Hz
++* stream is passed through ALSA's built in resampler.
++* There may be defect(s) in the resampler that are exposed when we
++* eliminate xrun in this way.
 +*/
 +
 +static int _pcm_swparams(snd_pcm_t **pcmp)
@@ -109,20 +131,28 @@ index 365fdf4bf..127efda4e 100644
  static int _pcm_open(struct decode_alsa *state,
  		     snd_pcm_t **pcmp,
  		     int mode,
-@@ -664,6 +729,13 @@ static int _pcm_open(struct decode_alsa *state,
+@@ -664,6 +739,21 @@ static int _pcm_open(struct decode_alsa *state,
  		goto skip_iec958;	  
  	}
  
-+	/* ### Baby bass drop-out ### */
-+	/* for playback device, we set software params too */
-+	err = _pcm_swparams(pcmp);
-+	if (err < 0) {
-+		return err;
++	/* ### Baby bass drop-out ###
++	 * If the sample rate is 48000 Hz we set software params too, to
++	 * eliminate 'xruns'.
++	 * But only if the sample rate is 48000 Hz. This setting is known
++	 * to play badly with 22050 Hz, and possibly other non-native rates.
++	*/
++
++	if (sample_rate == 48000) {
++		LOG_DEBUG("'Bass drop out' mitigation - eliminate 'xruns'");
++		err = _pcm_swparams(pcmp);
++		if (err < 0) {
++			return err;
++		}
 +	}
 +
  	if ((err = snd_hctl_open(&state->hctl, state->playback_device, 0)) < 0) {
  		LOG_ERROR("snd_hctl_open failed: %s", snd_strerror(err));
  		goto skip_iec958;
 -- 
-2.26.2
+2.34.1
 
