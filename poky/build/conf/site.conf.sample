@@ -35,3 +35,13 @@
 # Uncomment this to use a shared download directory
 #DL_DIR = "/some/shared/download/directory/"
 
+### Overides to meta/conf/bitbake.conf
+
+# Uncomment to pick up our local wget. bitbake does not provide system PATH when attempting
+# to execute wget, so our local version is never found, causing source code download failures.
+#
+# FETCHCMD_wget = "/usr/local/bin/wget -t 5"
+# FETCHCOMMAND_wget = "/usr/local/bin/wget -t 5 --passive-ftp -P ${DL_DIR} '${URI}'"
+# CHECKCOMMAND_wget = "/usr/local/bin/wget --spider -t 5 --passive-ftp -P ${DL_DIR} '${URI}'"
+# RESUMECOMMAND_wget = "/usr/local/bin/wget -c -t 5 --passive-ftp -P ${DL_DIR} '${URI}'"
+
