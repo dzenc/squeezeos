@@ -1,7 +1,7 @@
 DESCRIPTION = "The git revision control system used by the Linux kernel developers"
 SECTION = "console/utils"
 LICENSE = "GPL"
-DEPENDS = "perl-native openssl curl zlib expat"
+DEPENDS = "perl-native openssl curl zlib expat gettext-native"
 
 SRC_URI = "https://www.kernel.org/pub/software/scm/git/git-${PV}.tar.gz"
 
