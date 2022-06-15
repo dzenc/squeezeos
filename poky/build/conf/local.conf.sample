@@ -118,9 +118,16 @@ PACKAGE_CLASSES ?= "package_ipk"
 # Use "oabi" for machines with kernels < 2.6.18 on ARM for example.
 # Use "external-MODE" to use the precompiled external toolchains where MODE
 # is the type of external toolchain to use e.g. eabi.
+
+# "external-csl2010q1-modified" is a modified version of the Code Sourcery
+# csl2010q1 tool chain used to build the Community Firmware.
+# Always 'clean' the tool chain before switching to or from it:
+#   bitbake -c clean external-csl-toolchain
+
 #POKYMODE = "external-csl2009q1"
 #POKYMODE = "external-csl2009q3"
-POKYMODE = "external-csl2010q1"
+#POKYMODE = "external-csl2010q1"
+POKYMODE = "external-csl2010q1-modified"
 #POKYMODE = "external-csl2010.09"
 
 # Uncomment this to specify where BitBake should create its temporary files.
