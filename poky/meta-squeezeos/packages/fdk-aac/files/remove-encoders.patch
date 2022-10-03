@@ -1,0 +1,19 @@
+--- fdk-aac-2.0.2/Makefile.am.orig	2021-04-28 08:45:10.000000000 -0400
++++ fdk-aac-2.0.2/Makefile.am	2022-06-16 11:05:32.108443658 -0400
+@@ -244,12 +244,12 @@
+     libSYS/src/syslib_channelMapDescr.cpp
+ 
+ libfdk_aac_la_SOURCES = \
+-    $(AACDEC_SRC) $(AACENC_SRC) \
++    $(AACDEC_SRC) \
+     $(ARITHCODING_SRC) \
+     $(DRCDEC_SRC) \
+-    $(MPEGTPDEC_SRC) $(MPEGTPENC_SRC) \
+-    $(SACDEC_SRC) $(SACENC_SRC) \
+-    $(SBRDEC_SRC) $(SBRENC_SRC) \
++    $(MPEGTPDEC_SRC) \
++    $(SACDEC_SRC) \
++    $(SBRDEC_SRC) \
+     $(PCMUTILS_SRC) $(FDK_SRC) $(SYS_SRC)
+ 
+ EXTRA_DIST = \
