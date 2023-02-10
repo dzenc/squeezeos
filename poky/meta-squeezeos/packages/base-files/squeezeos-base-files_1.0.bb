@@ -118,11 +118,11 @@ do_install () {
 	install -m 0644 ${WORKDIR}/85-mtd.rules ${D}${sysconfdir}/udev/rules.d/85-mtd.rules
 	install -m 0644 ${WORKDIR}/85-squeezeos.rules ${D}${sysconfdir}/udev/rules.d/85-squeezeos.rules
 
-	# dropbear keys - are now dynamically generated, so first boot after factory reset takes a while. 
-	# install -m 0600 ${WORKDIR}/dropbear_dss_host_key ${D}${sysconfdir}/dropbear/dropbear_dss_host_key
-	# install -m 0600 ${WORKDIR}/dropbear_rsa_host_key ${D}${sysconfdir}/dropbear/dropbear_rsa_host_key
-	# install -m 0600 ${WORKDIR}/dropbear_ecdsa_host_key ${D}${sysconfdir}/dropbear/dropbear_ecdsa_host_key
-	# install -m 0600 ${WORKDIR}/dropbear_ed25519_host_key ${D}${sysconfdir}/dropbear/dropbear_ed25519_host_key
+	# dropbear keys - these should be dynamically generated, but it takes too long
+	install -m 0600 ${WORKDIR}/dropbear_dss_host_key ${D}${sysconfdir}/dropbear/dropbear_dss_host_key
+	install -m 0600 ${WORKDIR}/dropbear_rsa_host_key ${D}${sysconfdir}/dropbear/dropbear_rsa_host_key
+	install -m 0600 ${WORKDIR}/dropbear_ecdsa_host_key ${D}${sysconfdir}/dropbear/dropbear_ecdsa_host_key
+	install -m 0600 ${WORKDIR}/dropbear_ed25519_host_key ${D}${sysconfdir}/dropbear/dropbear_ed25519_host_key
 
 	# network scripts
 	install -m 0755 -d ${D}${sysconfdir}/network/if-down.d
