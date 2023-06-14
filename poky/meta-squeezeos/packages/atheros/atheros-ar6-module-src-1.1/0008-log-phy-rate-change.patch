@@ -1,0 +1,11 @@
+--- AR6kSDK.build_sw.83/host/wmi/wmi.c.orig     2023-06-08 18:22:03.570029797 +0000
++++ AR6kSDK.build_sw.83/host/wmi/wmi.c  2023-06-08 18:30:25.912886635 +0000
+@@ -3364,6 +3364,8 @@
+     cmd->numChannels = numChan;
+     A_MEMCPY(cmd->channelList, channelList, numChan * sizeof(A_UINT16));
+
++    A_PRINTF("AR6000 wmi_set_channelParams_cmd(phyMode = %d)\n",mode);
++
+     return (wmi_cmd_send(wmip, osbuf, WMI_SET_CHANNEL_PARAMS_CMDID,
+                          NO_SYNC_WMIFLAG));
+ }

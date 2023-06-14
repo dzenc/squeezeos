@@ -1,0 +1,12 @@
+--- AR6kSDK.build_sw.83/host/os/linux/ioctl.c.orig	2013-01-29 08:41:44.000000000 +0000
++++ AR6kSDK.build_sw.83/host/os/linux/ioctl.c	2023-06-07 14:11:47.570039406 +0000
+@@ -1847,6 +1847,9 @@
+             {
+                 ret = -EFAULT;
+             } else {
++		if(pwrModeCmd.powerMode == MAX_PERF_POWER) { A_PRINTF("AR6000 setting power to Max Perf\n"); }
++		if(pwrModeCmd.powerMode == REC_POWER) { A_PRINTF("AR6000 setting power to Rec\n"); }
++
+                 if (wmi_powermode_cmd(ar->arWmi, pwrModeCmd.powerMode)
+                        != A_OK)
+                 {

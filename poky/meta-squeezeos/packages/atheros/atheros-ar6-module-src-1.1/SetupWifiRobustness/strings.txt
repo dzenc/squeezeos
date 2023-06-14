@@ -1,0 +1,18 @@
+#
+# The two letter codes are defined by ISO 639-1
+# http://en.wikipedia.org/wiki/List_of_ISO_639_codes
+
+WIFI_ROBUSTNESS
+	EN	Wifi Robustness Options
+
+ARPWATCH_ENABLE
+	EN	Enable ARP watchdog
+
+ARPWATCH_HOWTO
+	EN	The ARP watchdog will reset the wifi stack if network connectivity seems to have stopped
+
+GONLY_ENABLE
+	EN	Disable legacy 802.11b
+
+GONLY_HOWTO
+	EN	Disabling legacy 802.11b can improve wifi stability but may also prevent connecting to some wifi access points

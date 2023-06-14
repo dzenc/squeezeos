@@ -1,0 +1,12 @@
+--- AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c.orig	2013-01-29 03:41:44.000000000 -0500
++++ AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c	2023-05-27 08:22:59.097127816 -0400
+@@ -4255,8 +4255,8 @@
+ {
+     TARGET_STATS *pStats = &ar->arTargetStats;
+     A_UINT8 ac;
+ 
+-    A_PRINTF("AR6000 updating target stats\n");
++    AR_DEBUG2_PRINTF("AR6000 updating target stats\n");
+     pStats->tx_packets          += pTarget->txrxStats.tx_stats.tx_packets;
+     pStats->tx_bytes            += pTarget->txrxStats.tx_stats.tx_bytes;
+     pStats->tx_unicast_pkts     += pTarget->txrxStats.tx_stats.tx_unicast_pkts;

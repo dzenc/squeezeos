@@ -1,0 +1,53 @@
+--- AR6kSDK.build_sw.83/host/wmi/wmi.c.orig	2013-01-29 08:41:44.000000000 +0000
++++ AR6kSDK.build_sw.83/host/wmi/wmi.c	2023-06-06 12:00:41.028194421 +0000
+@@ -1642,11 +1642,31 @@
+ wmi_statsEvent_rx(struct wmi_t *wmip, A_UINT8 *datap, int len)
+ {
+     WMI_TARGET_STATS *reply;
++    WMI_TARGET_STATS r;
++
++    // support old firmware data structure
++    if (len==sizeof(WMI_TARGET_STATS_OLD_FIRMWARE)) {
++	WMI_TARGET_STATS_OLD_FIRMWARE *ptr = (WMI_TARGET_STATS_OLD_FIRMWARE *)datap;
++
++       reply = &r;
++	len = sizeof(r);
++	
++    	reply->lqVal = ptr->lqVal;
++	reply->noise_floor_calibation = ptr->noise_floor_calibation;
++	reply->pmStats = ptr->pmStats;
++	reply->txrxStats = ptr->txrxStats;
++	reply->wowStats = ptr->wowStats;
++	reply->cservStats = ptr->cservStats;
++	reply->arpStats.arp_received = 0;
++	reply->arpStats.arp_matched = 0;
++	reply->arpStats.arp_replied = 0;
++    } else {
++    	reply = (WMI_TARGET_STATS *)datap;
++    }
+ 
+     if (len < sizeof(*reply)) {
+         return A_EINVAL;
+     }
+-    reply = (WMI_TARGET_STATS *)datap;
+     A_DPRINTF(DBG_WMI, (DBGFMT "Enter\n", DBGARG));
+ 
+     A_WMI_TARGETSTATS_EVENT(wmip->wmi_devt, reply);
+--- AR6kSDK.build_sw.83/include/wmi.h.orig	2023-06-06 12:14:16.321304639 +0000
++++ AR6kSDK.build_sw.83/include/wmi.h	2023-06-06 12:14:42.129470006 +0000
+@@ -1552,6 +1552,15 @@
+     cserv_stats_t       cservStats;
+ } POSTPACK WMI_TARGET_STATS;
+ 
++typedef PREPACK struct {
++    A_UINT32            lqVal;
++    A_INT32             noise_floor_calibation;
++    pm_stats_t          pmStats;
++    wlan_net_stats_t    txrxStats;
++    wlan_wow_stats_t    wowStats;
++    cserv_stats_t       cservStats;
++} POSTPACK WMI_TARGET_STATS_OLD_FIRMWARE;
++
+ /*
+  * WMI_RSSI_THRESHOLD_EVENTID.
+  * Indicate the RSSI events to host. Events are indicated when we breach a

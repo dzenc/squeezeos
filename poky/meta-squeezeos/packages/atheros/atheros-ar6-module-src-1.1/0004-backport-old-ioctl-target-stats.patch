@@ -1,0 +1,28 @@
+--- AR6kSDK.build_sw.83/host/os/linux/include/athdrv_linux.h.orig	2023-05-30 16:25:44.888133327 +0000
++++ AR6kSDK.build_sw.83/host/os/linux/include/athdrv_linux.h	2023-05-30 16:26:33.084694250 +0000
+@@ -994,9 +994,11 @@
+     A_UINT8     wow_num_host_pkt_wakeups;
+     A_UINT8     wow_num_host_event_wakeups;
+ 
++#if 0 // DNZ: old firmware doesn't report these
+     A_UINT32   arp_received;
+     A_UINT32   arp_matched;
+     A_UINT32   arp_replied;
++#endif
+ }TARGET_STATS;
+ 
+ typedef struct targetStats_cmd_t {
+--- AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c.orig	2023-05-30 16:30:20.567148148 +0000
++++ AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c	2023-05-30 16:31:21.891765740 +0000
+@@ -4336,9 +4336,11 @@
+     pStats->wow_num_host_event_wakeups += pTarget->wowStats.wow_num_host_event_wakeups;
+     pStats->wow_num_events_discarded += pTarget->wowStats.wow_num_events_discarded;
+ 
++#if 0 // DNZ: old firmware doesn't report these
+     pStats->arp_received += pTarget->arpStats.arp_received;
+     pStats->arp_matched  += pTarget->arpStats.arp_matched;
+     pStats->arp_replied  += pTarget->arpStats.arp_replied;
++#endif
+ 
+     ar->statsUpdatePending = FALSE;
+     wake_up(&arEvent);

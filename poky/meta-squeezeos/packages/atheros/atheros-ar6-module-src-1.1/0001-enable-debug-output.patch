@@ -1,0 +1,10 @@
+--- AR6kSDK.build_sw.83/host/os/linux/include/ar6000_drv.h.orig 2023-05-28 15:30:30.340794618 +0000
++++ AR6kSDK.build_sw.83/host/os/linux/include/ar6000_drv.h      2023-05-28 15:30:40.056862417 +0000
+@@ -116,6 +116,7 @@
+ 
+ #define DBG_DEFAULTS    (DBG_ERROR|DBG_WARNING)
+ 
++#define DEBUG
+ 
+ #ifdef DEBUG
+ #define AR_DEBUG_PRINTF(args...)        if (debugdriver) A_PRINTF(args);

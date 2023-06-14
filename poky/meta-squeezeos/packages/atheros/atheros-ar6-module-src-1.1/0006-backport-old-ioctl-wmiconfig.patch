@@ -1,0 +1,81 @@
+--- AR6kSDK.build_sw.83/host/os/linux/include/athdrv_linux.h	2013-01-29 04:41:44.000000000 
++++ AR6kSDK.build_sw.18/host/os/linux/include/athdrv_linux.h	2023-05-29 22:18:02.000000000 
+@@ -56,46 +56,46 @@
+  * Many ioctls simply provide WMI services to application code:
+  * an application makes such an ioctl call with a set of arguments
+  * that are packaged into the corresponding WMI message, and sent
+  * to the Target.
+  */
+ 
+-#define AR6000_IOCTL_WMI_GETREV              (SIOCIWFIRSTPRIV+11)
++#define AR6000_IOCTL_WMI_GETREV              (SIOCIWFIRSTPRIV+10)
+ /*
+  * arguments:
+  *   ar6000_version *revision
+  */
+ 
+-#define AR6000_IOCTL_WMI_SETPWR              (SIOCIWFIRSTPRIV+12)
++#define AR6000_IOCTL_WMI_SETPWR              (SIOCIWFIRSTPRIV+11)
+ /*
+  * arguments:
+  *   WMI_POWER_MODE_CMD pwrModeCmd (see include/wmi.h)
+  * uses: WMI_SET_POWER_MODE_CMDID
+  */
+ 
+-#define AR6000_IOCTL_WMI_SETSCAN             (SIOCIWFIRSTPRIV+13)
++#define AR6000_IOCTL_WMI_SETSCAN             (SIOCIWFIRSTPRIV+12)
+ /*
+  * arguments:
+  *   WMI_SCAN_PARAMS_CMD scanParams (see include/wmi.h)
+  * uses: WMI_SET_SCAN_PARAMS_CMDID
+  */
+ 
+-#define AR6000_IOCTL_WMI_SETLISTENINT        (SIOCIWFIRSTPRIV+14)
++#define AR6000_IOCTL_WMI_SETLISTENINT        (SIOCIWFIRSTPRIV+13)
+ /*
+  * arguments:
+  *   UINT32 listenInterval
+  * uses: WMI_SET_LISTEN_INT_CMDID
+  */
+ 
+-#define AR6000_IOCTL_WMI_SETBSSFILTER        (SIOCIWFIRSTPRIV+15)
++#define AR6000_IOCTL_WMI_SETBSSFILTER        (SIOCIWFIRSTPRIV+14)
+ /*
+  * arguments:
+  *   WMI_BSS_FILTER filter (see include/wmi.h)
+  * uses: WMI_SET_BSS_FILTER_CMDID
+  */
+ 
+ #define AR6000_IOCTL_WMI_SET_CHANNELPARAMS   (SIOCIWFIRSTPRIV+16)
+ /*
+  * arguments:
+  *   WMI_CHANNEL_PARAMS_CMD chParams
+  * uses: WMI_SET_CHANNEL_PARAMS_CMDID
+  */
+--- AR6kSDK.build_sw.83/host/os/linux/include/wmi_filter_linux.h.orig	2013-01-29 04:41:44.000000000 
++++ AR6kSDK.build_sw.83/host/os/linux/include/wmi_filter_linux.h	2023-06-05 03:52:32.000000000 
+@@ -100,18 +100,18 @@
+ (INFRA_NETWORK),                                /* IEEE80211_IOCTL_ADDPMKID             (SIOCIWFIRSTPRIV+4)     */
+ (0),                                            /* IEEE80211_IOCTL_SETOPTIE             (SIOCIWFIRSTPRIV+5)     */
+ (0),                                            /*                                      (SIOCIWFIRSTPRIV+6)     */
+ (0),                                            /*                                      (SIOCIWFIRSTPRIV+7)     */
+ (0),                                            /*                                      (SIOCIWFIRSTPRIV+8)     */
+ (0),                                            /*                                      (SIOCIWFIRSTPRIV+9)     */
+-(0),                                            /* IEEE80211_IOCTL_LASTONE              (SIOCIWFIRSTPRIV+10)    */
+-(0xFF),                                         /* AR6000_IOCTL_WMI_GETREV              (SIOCIWFIRSTPRIV+11)    */
+-(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETPWR              (SIOCIWFIRSTPRIV+12)    */
+-(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETSCAN             (SIOCIWFIRSTPRIV+13)    */
+-(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETLISTENINT        (SIOCIWFIRSTPRIV+14)    */
+-(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETBSSFILTER        (SIOCIWFIRSTPRIV+15)    */
++(0xFF),                                         /* AR6000_IOCTL_WMI_GETREV              (SIOCIWFIRSTPRIV+10)    */
++(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETPWR              (SIOCIWFIRSTPRIV+11)    */
++(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETSCAN             (SIOCIWFIRSTPRIV+12)    */
++(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETLISTENINT        (SIOCIWFIRSTPRIV+13)    */
++(INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SETBSSFILTER        (SIOCIWFIRSTPRIV+14)    */
++(0),                                            /*                                      (SIOCIWFIRSTPRIV+15)    */
+ (INFRA_NETWORK | ADHOC_NETWORK | AP_NETWORK),   /* AR6000_IOCTL_WMI_SET_CHANNELPARAMS   (SIOCIWFIRSTPRIV+16)    */
+ (INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SET_PROBEDSSID      (SIOCIWFIRSTPRIV+17)    */
+ (INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_SET_PMPARAMS        (SIOCIWFIRSTPRIV+18)    */
+ (INFRA_NETWORK),                                /* AR6000_IOCTL_WMI_SET_BADAP           (SIOCIWFIRSTPRIV+19)    */
+ (INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_GET_QOS_QUEUE       (SIOCIWFIRSTPRIV+20)    */
+ (INFRA_NETWORK | ADHOC_NETWORK),                /* AR6000_IOCTL_WMI_CREATE_QOS          (SIOCIWFIRSTPRIV+21)    */
