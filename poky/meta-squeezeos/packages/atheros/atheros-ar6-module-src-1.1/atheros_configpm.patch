@@ -1,0 +1,14 @@
+--- AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c.orig	2013-01-29 03:41:44.000000000 -0500
++++ AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c	2023-05-21 08:49:19.500577949 -0400
+@@ -3410,9 +3412,11 @@
+            /*
+             * this is a wmi control msg
+             */           
++#ifdef CONFIG_PM
+             if (ar->arWowState) {
+                 ar6000_wow_resume(ar);
+             }
++#endif
+             wmi_control_rx(ar->arWmi, skb);
+         } else {
+                 /*

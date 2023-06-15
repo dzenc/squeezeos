@@ -1,0 +1,21 @@
+--- AR6kSDK.build_sw.83/host/localmake.linux.inc.orig	2013-01-29 03:41:44.000000000 -0500
++++ AR6kSDK.build_sw.83/host/localmake.linux.inc	2023-05-20 15:23:08.453614869 -0400
+@@ -10,12 +10,12 @@
+ #       ATH_CROSS_COMPILE_TYPE := < cross compiler path >
+ #       ATH_LINUXPATH := < kernel source path >
+ 
+-#ATH_BUILD_TYPE := <Platform (Eg: LOCAL_i686)>
+-#ATH_BUS_TYPE := <Interconnect type (Eg: SDIO, SPI)>
+-#ATH_LINUXPATH := <Pointer to kernel source (Eg: /<path>/fc3-i686-2.6.9)>
+-#ATH_ARCH_CPU_TYPE := <Type of architecture (Eg: arm)>
+-#ATH_CROSS_COMPILE_TYPE := <Path to the compiler toolchain - Eg: (/<path>/arm_v4t_le-)
+-#ATH_OS_SUB_TYPE := <Kernel version - (Eg: linux_2_4, linux_2_6)>
++ATH_BUILD_TYPE := NATIVEMMC
++ATH_BUS_TYPE := SDIO
++ATH_BUS_SUBTYPE := linux_sdio
++ATH_LINUXPATH := ${KERNEL_SOURCE}
++ATH_ARCH_CPU_TYPE := arm
++ATH_CROSS_COMPILE_TYPE := ${CROSS_COMPILE}
+ 
+ #ATHENV
+ 

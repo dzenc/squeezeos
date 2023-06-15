@@ -1,0 +1,28 @@
+--- AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c.orig	2023-06-05 11:41:12.327878525 +0000
++++ AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c	2023-06-05 11:44:46.685355079 +0000
+@@ -3805,6 +3805,25 @@
+ 
+     ar->arPhyCapability = phyCap;
+     ar->arVersion.wlan_ver = vers;
++
++    A_PRINTF("AR6000 Driver Rev = 0x%x(%u.%u.%u.%u), ROM Rev = 0x%x(%u.%u.%u.%u), "
++               "Firmware Rev = 0x%x(%u.%u.%u.%u)\n",
++              ar->arVersion.host_ver,
++              ((ar->arVersion.host_ver)&0xf0000000)>>28,
++              ((ar->arVersion.host_ver)&0x0f000000)>>24,
++              ((ar->arVersion.host_ver)&0x00ff0000)>>16,
++              ((ar->arVersion.host_ver)&0x0000ffff),
++              ar->arVersion.target_ver,
++              ((ar->arVersion.target_ver)&0xf0000000)>>28,
++              ((ar->arVersion.target_ver)&0x0f000000)>>24,
++              ((ar->arVersion.target_ver)&0x00ff0000)>>16,
++              ((ar->arVersion.target_ver)&0x0000ffff),
++              ar->arVersion.wlan_ver,
++              ((ar->arVersion.wlan_ver)&0xf0000000)>>28,
++              ((ar->arVersion.wlan_ver)&0x0f000000)>>24,
++              ((ar->arVersion.wlan_ver)&0x00ff0000)>>16,
++              ((ar->arVersion.wlan_ver)&0x0000ffff)
++              );
+ }
+ 
+ A_UINT8

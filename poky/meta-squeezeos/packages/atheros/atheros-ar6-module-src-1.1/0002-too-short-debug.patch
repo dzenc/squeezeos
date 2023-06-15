@@ -1,0 +1,18 @@
+--- AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c.orig	2023-05-28 15:32:46.205735895 +0000
++++ AR6kSDK.build_sw.83/host/os/linux/ar6000_drv.c	2023-05-29 06:00:50.455138965 +0000
+@@ -3439,7 +3439,14 @@
+                     /*
+                      * packet is too short or too long
+                      */
+-                    AR_DEBUG_PRINTF("TOO SHORT or TOO LONG\n");
++                    int i;
++                    AR_DEBUG_PRINTF("TOO SHORT or TOO LONG %d bytes: ",pPacket->ActualLength);
++#ifdef DEBUG
++                    for(i = 0; i < a_netbuf_to_len(skb); i++)
++                       A_PRINTF("%02x ", ((A_UINT8 *)a_netbuf_to_data(skb))[i]);
++#endif
++                    AR_DEBUG_PRINTF("\n");
++
+                     AR6000_STAT_INC(ar, rx_errors);
+                     AR6000_STAT_INC(ar, rx_length_errors);
+                     A_NETBUF_FREE(skb);
