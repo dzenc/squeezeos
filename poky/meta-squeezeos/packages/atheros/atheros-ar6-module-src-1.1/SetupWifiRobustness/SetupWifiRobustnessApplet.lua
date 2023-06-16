@@ -41,10 +41,10 @@ function settingsShow(self, menuItem)
 									settingsChanged = true
 									if isSelected then
 										log:warn("wlan.conf setting arpwatch=on");
-										_fileSub("/etc/wlan.conf", "^arpwatch=off", "arpwatch=on")  
+										_fileSub("/etc/wlan.conf", "^arpwatch=.*$", "arpwatch=on")  
 									else
 										log:warn("wlan.conf setting arpwatch=off");
-										_fileSub("/etc/wlan.conf", "^arpwatch=on", "arpwatch=off")
+										_fileSub("/etc/wlan.conf", "^arpwatch=.*$", "arpwatch=off")
 									end
 								end,
 								arpwatchEnabled
@@ -63,10 +63,10 @@ function settingsShow(self, menuItem)
 									settingsChanged = true
 									if isSelected then
 										log:warn("wlan.conf setting gonly=on");
-										_fileSub("/etc/wlan.conf", "^gonly=off", "gonly=on")  
+										_fileSub("/etc/wlan.conf", "^gonly=.*$", "gonly=on")  
 									else
 										log:warn("wlan.conf setting gonly=off");
-										_fileSub("/etc/wlan.conf", "^gonly=on", "gonly=off")
+										_fileSub("/etc/wlan.conf", "^gonly=.*$", "gonly=off")
 									end
 								end,
 								gonlyEnabled
@@ -124,11 +124,19 @@ end
 
 function _fileSub(file, pattern, repl)
         local data = ""
+        local match = false
 
         local fi = io.open(file, "r")
         for line in fi:lines() do
-                line = string.gsub(line, pattern, repl)
+        	if string.match(line, pattern) then
+        		match = true
+                	line = string.gsub(line, pattern, repl)
+                end
                 data = data .. line .. "\n"
+        end
+        -- if we haven't found a match to replace, add to end of file
+        if match == false then
+        	data = data .. repl .. "\n"
         end
         fi:close()
 
