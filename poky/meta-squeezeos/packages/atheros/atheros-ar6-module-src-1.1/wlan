@@ -25,9 +25,11 @@ case "$1" in
 	    exit -1
 	fi
 
-	/lib/atheros/wmiconfig -eth1 --filter=all
-
 	# act on settings from /etc/wlan.conf
+	if [ "${filterall}" == "on" ]; then
+		/lib/atheros/wmiconfig -eth1 --filter=all
+	fi
+
 	if [ "${gonly}" == "on" ]; then
 		/lib/atheros/wmiconfig --wmode gonly	
 	fi
